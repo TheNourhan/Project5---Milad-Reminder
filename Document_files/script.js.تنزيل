@@ -1,0 +1,31 @@
+const sending_info= 
+[
+    "late", "not-late", "late", "late", "late",
+    "not-late","not-late","not-late","not-late", "not-late",
+    "late","late", "late","late", "not-late", 
+    "not-late", "not-late","late", "late","not-late"];
+const workdays=
+[
+    "offday", "workday", "workday", "workday", "workday",
+    "offday", "offday", "offday", "workday","workday",
+    "workday", "workday", "workday", "offday", "offday",
+    "workday", "workday", "workday", "workday", "offday"];
+
+ let random_messages=
+ [
+    "I will be late today, Sorry", 
+    "I have to take my kids to school, I will be late", 
+    "I have a doctor appointment this morning, I will be late", 
+    "My car broke down, I will be late!"
+];
+
+for(var i =1;i<= workdays.length; i++){
+    for(var j=1;j<=random_messages.length;j++){
+        if((sending_info[i-1]==="late" && workdays[i-1]==="workday") ){
+            console.log(`Day ${i}:  `+ random_messages[j-1]);
+        }
+        else{
+            console.log(`Day ${i}:  `);
+        }
+    }
+}

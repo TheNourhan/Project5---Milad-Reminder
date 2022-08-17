@@ -1,0 +1,34 @@
+<!-------------- NOURHAN HASAN --------------------->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milad Reminder</title>
+</head>
+<body>
+    <div id="problem-solv" style="text-align: center;">
+        <h1>Milad Reminder</h1>
+        <p>Milad sometimes wakes up late, and he would like to send an automated message to the office, to inform them that he will be late.
+            This system needs to work for 20 days, and keep in mind that he does not work on weekends (sat, sun), and some special off-days.</p>
+            <h3>Click here to see the days that Milad was late</h3>
+        <button id="click-here" type="button">click here</button> 
+        <p>if milad is late on critical days, his salary will be deducted
+         <h4>critical1: 100$ deduction from salary, it will appear in <b style="color:blue;">blue</b></h4>
+         <h4>critical2: 200$ deduction from salary, it will appear in <b style="color:yellow;">yellow</b></h4>
+         <h4>critical3: 180$ deduction from salary, it will appear in <b style="color:red;">red</b></h4>
+         <h4>critical4: 500$ deduction from salary, it will appear in <b style="color:green;">green</b></h4>
+        </p>  
+        <ul id="days" style="text-align: left">
+        </ul>
+        <div id="report">
+            <table id="window"></table>
+            <button id="get-report" type="button">Get Report</button> 
+        </div>
+        <button id="reset" type="reset" value="reset" onclick="reset()">Reset</button>
+    </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
