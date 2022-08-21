@@ -36,21 +36,65 @@ for(let j=0;j<workdays.length;j++){
     list.innerHTML+="<li></li>";
 }
 
+// An object calculates demurrages
+let demurrages = {
+    critical1: {
+        C1: 100,
+    },
+    critical2: {
+        C2: 200,
+    },
+    critical3: {
+        C3: 180,
+    },
+    critical4: {
+        C4: 500,
+    },
+}
+
 /* The function adds random messages if Milad is late by a working day,
- then calls the discount function if Milad is late by a critical day */
+   and deducts from him by calling the demurrages object and storing its value in an array
+   if he is late on critical working day */
 function main(){
     // call the element with the id days and then call all its elements
     let messages= document.querySelectorAll("#days li");
 
-    for(var i =0;i< workdays.length; i++){ 
+    for(let i =0;i< workdays.length; i++){ 
         // the program will only send a message on the days that Milad is late 
         if(sending_info[i]=="late" && workdays[i]=="workday"){
             // add Class to the list
             messages[i].classList.add('message-sent-workday');
             // insert of random messages
-            messages[i].innerText = `DAY ${i+1}: ${random_messages[Math.floor(Math.random()*4)]}`;
-            // call function deducts
-            deducts(i,new_milad_salary);
+            messages[i].innerText = `DAY ${i+1}: ${random_messages[Math.floor(Math.random()*random_messages.length)]}`;
+
+            // the program will be deducted from Milad`s salary only on critical days
+            if(critical_days[i]=='critical1'){
+                // Call the object that is deducted from Milad`s salary and store it in a array
+                new_milad_salary[i] = demurrages.critical1.C1;
+                // Change background color of list
+                document.querySelectorAll("#days li")[i].style.background="blue";
+            }
+            else if(critical_days[i]=='critical2'){
+                // Call the object that is deducted from Milad`s salary and store it in a array
+                new_milad_salary[i] = demurrages.critical2.C2;
+                // Change background color of list
+                document.querySelectorAll("#days li")[i].style.background="yellow";
+            }
+            else if(critical_days[i]=='critical3'){
+                // Call the object that is deducted from Milad`s salary and store it in a array
+                new_milad_salary[i] = demurrages.critical3.C3;
+                // Change background color of list
+                document.querySelectorAll("#days li")[i].style.background="red";
+            }
+            else if(critical_days[i]=='critical4'){
+                // Call the object that is deducted from Milad`s salary and store it in a array
+                new_milad_salary[i] = demurrages.critical4.C4;
+                // Change background color of list
+                document.querySelectorAll("#days li")[i].style.background="green";
+            }
+            else{
+                new_milad_salary[i]=0;
+            }
         }
         else{
             // add Class to the list
@@ -59,116 +103,47 @@ function main(){
             new_milad_salary[i]= 0;
         }
     }
+    // To activate the report button
+    btn_report.disabled = false;
 }
 // create a boutton click event by calling function (main)
 document.querySelector("#click-here").addEventListener("click",main);
 
-// An object calculates demurrages
-let demurrages = {
-    critical1: function(x){
-        return x - 100;
-    },
-    critical2: function(x){
-        return x - 200;
-    },
-    critical3: function(x){
-        return x - 180;
-    },
-    critical4: function(x){
-        return x - 500;
-    },
-}
-
-/* A function that deducts Milad`s salary if he is late for work on critical days.
- * and the function works as an iterative loop when it is called. */
-function deducts(k,salary){
-        if(sending_info[k]=="late" && workdays[k]=="workday" && critical_days[k]=='critical1'){
-            // Call the object that is deducted from Milad`s salary and store it in a array
-            salary[k] = demurrages.critical1(milad_salary);
-            // Change background color of list
-            document.querySelectorAll("#days li")[k].style.background="blue";
-        }
-        else if(sending_info[k]=="late" && workdays[k]=="workday" && critical_days[k]=='critical2'){
-            // Call the object that is deducted from Milad`s salary and store it in a array
-            salary[k] = demurrages.critical2(milad_salary);
-            // Change background color of list
-            document.querySelectorAll("#days li")[k].style.background="yellow";
-        }
-        else if(sending_info[k]=="late" && workdays[k]=="workday" && critical_days[k]=='critical3'){
-            // Call the object that is deducted from Milad`s salary and store it in a array
-            salary[k] = demurrages.critical3(milad_salary);
-            // Change background color of list
-            document.querySelectorAll("#days li")[k].style.background="red";
-        }
-        else if(sending_info[k]=="late" && workdays[k]=="workday" && critical_days[k]=='critical4'){
-            // Call the object that is deducted from Milad`s salary and store it in a array
-            salary[k] = demurrages.critical4(milad_salary);
-            // Change background color of list
-            document.querySelectorAll("#days li")[k].style.background="green";
-        }
-        else{
-            salary[k]=0;
-        }
-}
-
-/* Collect report information into an object */
+/* Show repotr data in a table */
 function report_data(){
-    // The object that stores report information
-    let data_report = {
-         new_milad_salary_data: function(){
-            // Add all the elements of the array, then subtract the number from 1000
-            return new_milad_salary.reduce((acc, current) => acc + current,-1000); // 620 
-        },
-        deducted_amount_data: function(){
-            // retutn the value of the total discount
-            return milad_salary - data_report.new_milad_salary_data(); // 380 
-        },
-        num_days_milad_late_data: function(){
-            // The number of days that Milad was late
-            for(let i=0 ; i<workdays.length ;i++){
-                let clas= document.getElementsByClassName('message-not-sent-offday').length;
-                return  workdays.length - clas; // 8
-            }
-        },
-    }
-    // The message that will appear in the report
-    return `salary milad befor: ${milad_salary} ****************************** salary milad after: ${data_report.new_milad_salary_data()} *****************************
-        number of days milad is late: ${data_report.num_days_milad_late_data()} 
-        *********************** discount value: ${data_report.deducted_amount_data()} *******************************`; 
-}
+    // Add all the elements of the array
+    let deducted_amount_data = new_milad_salary.reduce((acc, current) => acc + current); // 380
+    // Milad`s salary after the deducted
+    let new_milad_salary_data = milad_salary - deducted_amount_data; // 620 
+    // The number of days that Milad was late
+    let num_days_milad_late_data =  workdays.length - document.getElementsByClassName('message-not-sent-offday').length; // 8
+    
+    // Insert report data into table elements
+    document.querySelector('#report_info').innerHTML = `<tr><th>salary milad befor: </th><th>${milad_salary}</th></tr>
+    <tr><th>salary milad after: </th><th>${new_milad_salary_data}</th></tr>
+    <tr><th>number of days milad is late: </th><th>${num_days_milad_late_data}</th></tr>
+    <tr><th>discount value: </th><th>${deducted_amount_data}</th></tr>`;
 
-/* Show a popup */
-function report(){
-    /*
-     * <in a popup>:
-     * salary milad befor = 1000
-     * salary milad after = ****
-     * number of days milad is late = ****
-     * discount value = ****
-     */
-
-    // A library that creats a popup
-    Swal.fire({
-        title: 'Report',
-        // Calling the function that returns the report information
-        text: report_data(), 
-        showCloseButton: true,
-        focusConfirm: false,
-        confirmButtonText: 'Thanks'
-    });
+    // To show report information
+    document.querySelector('#report_info').style.display = "block";
 }
 // create a boutton click event by calling function (report)
-document.querySelector("#get-report").addEventListener("click",report);
+let btn_report = document.querySelector("#get-report");
+btn_report.addEventListener("click",report_data);
 
 /* The function initializes the reset button */
 let rst = document.querySelectorAll("#days li");
 function reset(){
-    for(let i=0;i<20;i++){
+    for(let i=0;i<workdays.length;i++){
         rst[i].innerText = ' ';
         rst[i].style.background= "none";
         rst[i].classList.remove('message-sent-workday');
         rst[i].classList.remove('message-not-sent-offday');
     }
+    // To hide report information
+    document.querySelector('#report_info').style.display = "none";
+    // To disabled the report button
+    btn_report.disabled = true;
 }
 // create a boutton click event by calling function (reset)
 document.querySelector("#reset").addEventListener("click",reset);
